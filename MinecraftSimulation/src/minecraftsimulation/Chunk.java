@@ -103,43 +103,55 @@ public class Chunk {
             cubeColors[i] = CubeColorArray[i % CubeColorArray.length];
         return cubeColors;     
     }
-    
-    public static float[] createCube(float x, float y, float z) {
-        int offset = CUBE_LENGTH / 2;
-        return new float[] {
-            // TOP QUAD
-            x + offset, y + offset, z,
-            x - offset, y + offset, z,
-            x - offset, y + offset, z - CUBE_LENGTH,
-            x + offset, y + offset, z - CUBE_LENGTH,
-            // BOTTOM QUAD
-            x + offset, y - offset, z - CUBE_LENGTH,
-            x - offset, y - offset, z - CUBE_LENGTH,
-            x - offset, y - offset, z,
-            x + offset, y - offset, z,
-            // FRONT QUAD
-            x + offset, y + offset, z - CUBE_LENGTH,
-            x - offset, y + offset, z - CUBE_LENGTH,
-            x - offset, y - offset, z - CUBE_LENGTH,
-            x + offset, y - offset, z - CUBE_LENGTH,
-            // BACK QUAD
-            x + offset, y - offset, z,
-            x - offset, y - offset, z,
-            x - offset, y + offset, z,
-            x + offset, y + offset, z,
-            // LEFT QUAD
-            x - offset, y + offset, z - CUBE_LENGTH,
-            x - offset, y + offset, z,
-            x - offset, y - offset, z,
-            x - offset, y - offset, z - CUBE_LENGTH,
-            // RIGHT QUAD
-            x + offset, y + offset, z,
-            x + offset, y + offset, z - CUBE_LENGTH,
-            x + offset, y - offset, z - CUBE_LENGTH,
-            x + offset, y - offset, z 
-        };
-    }
-    
+    public static float[] createTexCube(float x, float y, Block block){
+		float offset = (1024f/16)/1024f;
+		
+		switch(block.getId()){
+			case 0://Grass
+				return new float[]{
+					//TOP QUAD(DOWN=+Y)
+					x+offset*3, y+offset*10,//green wool for top of grass
+					x+offset*2, y+offset*10,
+					x+offset*2, y+offset*9,
+					x+offset*3, y+offset*9,
+					//BOTTOM QUAD
+					x+offset*3, y+offset*1,
+					x+offset*2, y+offset*1,
+					x+offset*2, y+offset*0,
+					x+offset*3, y+offset*0,
+					//FRONT QUAD
+					x+offset*3, y+offset*0,
+					x+offset*4, y+offset*0,
+					x+offset*4, y+offset*1,
+					x+offset*3, y+offset*1,
+					//BACK QUAD
+					x+offset*4, y+offset*1,
+					x+offset*3, y+offset*1,
+					x+offset*3, y+offset*0,
+					x+offset*4, y+offset*0,
+					//LEFT QUAD
+					x+offset*3, y+offset*0,
+					x+offset*4, y+offset*0,
+					x+offset*4, y+offset*1,
+					x+offset*3, y+offset*1,
+					//RIGHT QUAD
+					x+offset*3, y+offset*0,
+					x+offset*4, y+offset*0,
+					x+offset*4, y+offset*1,
+					x+offset*3, y+offset*1};
+			case 1://Sand
+				return sameTextureOnAllSides(x, y, offset, 2, 1);
+			case 2://Water
+				return sameTextureOnAllSides(x, y, offset, 14, 0);
+			case 3://Dirt
+				return sameTextureOnAllSides(x, y, offset, 2, 0);
+			case 4://Stone
+				return sameTextureOnAllSides(x, y, offset, 1, 0);
+			case 5://Bedrock
+				return sameTextureOnAllSides(x, y, offset, 1, 1);
+		}
+		throw new RuntimeException("No texture mapping for block id: " + block.getId());
+}    
     private float[] getCubeColor(Block block) {
         return new float[] {1, 1, 1};
 //        switch(block.getId()) {
