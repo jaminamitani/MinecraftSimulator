@@ -25,6 +25,7 @@ public class FPCameraController {
     private float yaw = 0f;
     private float pitch = 0f;
     private Vector3f camera;
+    private Chunk chunk;
     
     public FPCameraController(float x, float y, float z) { 
         //instantiate position Vector3f to the x y z params.
@@ -33,6 +34,7 @@ public class FPCameraController {
         lPosition.x = 0f;
         lPosition.y = 15f;
         lPosition.z = 0f;
+        chunk = new Chunk((int)x, (int)y, (int)z);
     }
 
    //increment the camera's current yaw rotation
@@ -146,7 +148,7 @@ public class FPCameraController {
             camera.lookThrough();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //you would draw your scene here.
-            render();
+            chunk.render();
             //draw the buffer to the screen
             Display.update();
             Display.sync(60);
@@ -154,7 +156,7 @@ public class FPCameraController {
         Display.destroy();
     }
 
-    // draw the cube
+    // draw the cube (outdated)
     private void render() {
         // Left
         glColor3f(0f, 1f, 0f);
